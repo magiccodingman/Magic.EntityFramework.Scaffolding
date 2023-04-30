@@ -1,7 +1,5 @@
 # Magic EntityFramework Scaffolding
 
-## Overview
-
 Magic EntityFramework Scaffolding is a console application designed to streamline the setup and management of your C# Entity Framework projects. It automates the creation of model classes, extension classes, metadata classes, repository classes, environment switching logic classes, helper classes, concrete classes, and interface classes for both database-first and code-first projects. By intelligently managing your code, it significantly reduces the amount of manual work required when adding new models that match your database. The application also provides an easy-to-use repository for common CRUD operations.
 
 Magic EntityFramework Scaffolding takes care of environment configurations by allowing you to input connection strings for different environments. It includes smart logic to avoid overwriting your changes to extensions, metadata, and more, while updating the main models as needed.
