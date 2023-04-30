@@ -233,3 +233,117 @@ public class SampleTableMetaData
 ```
 
 By utilizing these auto-generated files, Magic EntityFramework Scaffolding simplifies the process of managing your Entity Framework projects. It streamlines the creation and management of model classes, repositories, and other related files, allowing you to focus on implementing your application's core functionality.
+
+# Working with Repositories
+
+Magic EntityFramework Scaffolding generates repositories that provide an organized way to add additional logic, manage data, and interact with your database. Repositories are designed to work seamlessly with various Entity Framework features, such as Eager Loading and Deferred Execution.
+
+This section will provide generic examples and use cases of working with repositories, focusing on how they simplify data management in your application.
+
+## Creating a new record
+
+Using the auto-generated repositories, you can easily create and add new records to the database:
+
+```csharp
+var newSample = new SampleTable();
+newSample.Id = Guid.NewGuid();
+newSample.Name = "Sample Name";
+
+var sampleRepo = new SampleTableRepository();
+sampleRepo.Add(newSample);
+```
+
+This example demonstrates how to create a new `SampleTable` object, populate its properties, and use the `Add` method provided by the auto-generated `SampleTableRepository` to save the record to the database.
+
+## Updating a record
+
+To update a record, you can retrieve it from the database, modify its properties, and use the `Update` method provided by the auto-generated repository:
+
+```csharp
+var sampleRepo = new SampleTableRepository();
+var sampleToUpdate = sampleRepo.GetById(someId);
+
+sampleToUpdate.Name = "Updated Sample Name";
+sampleRepo.Update(sampleToUpdate);
+```
+
+In this example, the `GetById` method is used to retrieve a `SampleTable` record, the `Name` property is modified, and the `Update` method is called to save the changes to the database.
+
+## Deleting a record
+
+To delete a record from the database, you can use the `Delete` method provided by the auto-generated repository:
+
+```csharp
+var sampleRepo = new SampleTableRepository();
+var sampleToDelete = sampleRepo.GetById(someId);
+
+sampleRepo.Delete(sampleToDelete);
+```
+
+This example demonstrates how to retrieve a `SampleTable` record and delete it from the database using the `Delete` method.
+
+## Querying data with Eager Loading
+
+If you need to perform Eager Loading to retrieve related data along with the main data, you can use the `Include` method provided by Entity Framework:
+
+```csharp
+var sampleRepo = new SampleTableRepository();
+var sampleWithRelatedData = sampleRepo.GetAll()
+                                      .Include(s => s.RelatedEntities)
+                                      .FirstOrDefault(s => s.Id == someId);
+```
+
+This example demonstrates how to retrieve a `SampleTable` record and its related `RelatedEntity` records in a single query using Eager Loading.
+
+## Combining repository methods
+
+You can combine various repository methods to create complex operations in your application. In this example, we create a new `SampleTable` record, retrieve its related data, and update a property of one of the related records:
+
+```csharp
+// Create a new SampleTable record
+var newSample = new SampleTable();
+newSample.Id = Guid.NewGuid();
+newSample.Name = "Sample Name";
+
+var sampleRepo = new SampleTableRepository();
+sampleRepo.Add(newSample);
+
+// Retrieve the new SampleTable record with its related data
+var sampleWithRelatedData = sampleRepo.GetAll()
+                                      .Include(s => s.RelatedEntities)
+                                      .FirstOrDefault(s => s.Id == newSample.Id);
+
+// Update a property of one of the related records
+var relatedRepo = new RelatedEntityRepository();
+var firstRelated = sampleWithRelatedData.RelatedEntities.First();
+firstRelated.SomeProperty = "Updated Value";
+relatedRepo.Update(firstRelated);
+```
+
+This example demonstrates how to create a new `SampleTable` record, retrieve it with its related data using Eager Loading, and update a property of one of the related records.
+
+By leveraging the auto-generated repositories and their methods, you can easily manage your data and interact with your database in a cleanand organized manner. Repositories allow you to focus on your application's core functionality while abstracting away the complexities of working with Entity Framework and database interactions.
+
+## Adding custom methods to the repository
+
+You can extend the auto-generated repositories by adding custom methods tailored to your specific requirements. In this example, we add a custom method to the `SampleTableRepository` that retrieves records with a specific status:
+
+```csharp
+public class SampleTableRepository : RepositoryBase<SampleTable>, ISampleTableRepository
+{
+    // Custom method to retrieve records with a specific status
+    public IEnumerable<SampleTable> GetByStatus(string status)
+    {
+        return _dbSet.Where(s => s.Status == status);
+    }
+}
+```
+
+This custom method can then be used in your application to retrieve `SampleTable` records based on their status:
+
+```csharp
+var sampleRepo = new SampleTableRepository();
+var activeSamples = sampleRepo.GetByStatus("Active");
+```
+
+These examples illustrate the power and flexibility of the auto-generated repositories, enabling you to effectively manage your data and easily interact with your database in a wide range of scenarios.
