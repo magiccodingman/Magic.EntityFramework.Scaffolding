@@ -255,6 +255,8 @@ sampleRepo.Add(newSample);
 
 This example demonstrates how to create a new `SampleTable` object, populate its properties, and use the `Add` method provided by the auto-generated `SampleTableRepository` to save the record to the database.
 
+Note that all the of following examples do include all the syntax available as bulk operations are added, but the goal here is to give you a general idea of how this works.
+
 ## Updating a record
 
 To update a record, you can retrieve it from the database, modify its properties, and use the `Update` method provided by the auto-generated repository:
