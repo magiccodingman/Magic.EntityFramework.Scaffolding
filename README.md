@@ -240,6 +240,8 @@ Magic EntityFramework Scaffolding generates repositories that provide an organiz
 
 This section will provide generic examples and use cases of working with repositories, focusing on how they simplify data management in your application.
 
+Note that all the of following examples do include all the syntax available as bulk operations are added, but the goal here is to give you a general idea of how this works.
+
 ## Creating a new record
 
 Using the auto-generated repositories, you can easily create and add new records to the database:
@@ -254,8 +256,6 @@ sampleRepo.Add(newSample);
 ```
 
 This example demonstrates how to create a new `SampleTable` object, populate its properties, and use the `Add` method provided by the auto-generated `SampleTableRepository` to save the record to the database.
-
-Note that all the of following examples do include all the syntax available as bulk operations are added, but the goal here is to give you a general idea of how this works.
 
 ## Updating a record
 
