@@ -141,3 +141,95 @@ As you make changes to your database schema, you can continue to use Magic Entit
 ## Conclusion
 
 Magic EntityFramework Scaffolding streamlines the setup and management of your C# Entity Framework projects by automating the creation of various classes and managing environment configurations. By following the steps outlined in this documentation, you can quickly set up and manage your Entity Framework projects with ease, saving time and effort on manual tasks.
+
+# Auto-Generated Files
+
+Magic EntityFramework Scaffolding automatically generates several files for you, based on the database schema and the settings you've provided. This section will walk you through the types of files generated and how they work.
+
+## Model Classes
+
+The console app generates model classes that replicate the structure of your database tables. These classes include properties, attributes, and navigation properties for related entities. Here's a simplified, generic example of an auto-generated model class:
+
+```csharp
+using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore;
+
+namespace DataAccess;
+
+[Table("SampleTable")]
+public partial class SampleTable
+{
+    [Key]
+    public Guid Id { get; set; }
+
+    [StringLength(255)]
+    public string Name { get; set; } = null!;
+
+    [InverseProperty("SampleTable")]
+    public virtual ICollection<RelatedEntity> RelatedEntities { get; set; } = new List<RelatedEntity>();
+}
+```
+
+## IRepository Interface
+
+An empty IRepository interface is generated for each model, providing a blueprint for the concrete repository class:
+
+```csharp
+public interface ISampleTableRepository : IRepository<SampleTable>
+{
+}
+```
+
+## Concrete Repository Classes
+
+A concrete repository class is generated for each model, implementing the corresponding IRepository interface. This class provides a default implementation for common CRUD operations, as well as any custom logic required for your specific models. Here's an example of an auto-generated concrete repository class:
+
+```csharp
+public class SampleTableRepository : RepositoryBase<SampleTable>, ISampleTableRepository
+{
+    // Overloaded method that takes multiple parameters
+    public SampleTable GetById(Guid Id)
+    {
+        // Call the default implementation with the parameters as a dictionary
+        return GetById((object)new Dictionary<string, object> { { "Id", Id } });
+    }
+
+    public SampleTable GetById(object id)
+    {
+        // ... (Implementation of GetById using a dictionary)
+    }
+}
+```
+
+This example demonstrates how the console app generates smart logic for the `GetById` method, simplifying retrieval of records by primary key.
+
+## Extension Classes (Partial)
+
+The console app generates partial extension classes for your models, allowing you to add custom properties, methods, and enumerations without modifying the auto-generated model classes:
+
+```csharp
+[MetadataType(typeof(SampleTableMetaData))]
+public partial class SampleTable
+{
+    public enum CustomEnumeration
+    {
+        None = 0,
+        Option1 = 1,
+    }
+}
+```
+
+## MetaData Classes
+
+MetaData classes are generated for each model, allowing you to add data annotations or attributes to the existing properties of your model classes. This is useful for validation, display formatting, and other metadata-related tasks:
+
+```csharp
+public class SampleTableMetaData
+{
+}
+```
+
+By utilizing these auto-generated files, Magic EntityFramework Scaffolding simplifies the process of managing your Entity Framework projects. It streamlines the creation and management of model classes, repositories, and other related files, allowing you to focus on implementing your application's core functionality.
