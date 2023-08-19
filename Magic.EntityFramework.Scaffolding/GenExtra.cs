@@ -660,7 +660,7 @@ namespace {SettingsHelper.GetSettings().WorkingDirectory}.Concrete
         private static string GenerateDefaultGetById(string className, Dictionary<string, string> keys)
         {
             var conditions = string.Join(" && ", keys.Select(key => $"c.{key.Key} == ({key.Value})idDict[\"{key.Key}\"]"));
-            var typeChecksAndConversions = string.Join(Environment.NewLine, keys.Select(key => GetIdTypeCheckAndConversionCode(key.Key)));
+            var typeChecksAndConversions = string.Join(Environment.NewLine, keys.Select(key => GetIdTypeCheckAndConversionCode(key.Key, keys)));
 
             return $@"public {className} GetById(object id)
     {{
@@ -676,16 +676,14 @@ namespace {SettingsHelper.GetSettings().WorkingDirectory}.Concrete
     }}";
         }
 
-        private static string GetKeyType(string key)
+        private static string GetKeyType(string key, Dictionary<string, string> keys)
         {
-            // Add logic to determine the type of the key based on the class property.
-            // For now, we are assuming "long" as the default type.
-            return "long";
+            return keys.ContainsKey(key) ? keys[key] : "long"; // Default to long if not found
         }
 
-        private static string GetIdTypeCheckAndConversionCode(string key)
+        private static string GetIdTypeCheckAndConversionCode(string key, Dictionary<string, string> keys)
         {
-            string keyType = GetKeyType(key);
+            string keyType = GetKeyType(key, keys);
             return $@"object temp{key};
             if (!idDict.TryGetValue(""{key}"", out temp{key}))
             {{
