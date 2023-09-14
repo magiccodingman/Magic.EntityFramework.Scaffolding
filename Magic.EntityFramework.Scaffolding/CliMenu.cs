@@ -366,7 +366,12 @@ namespace Magic.EntityFramework.Scaffolding
         {
             return new string(input.Where(c => !Char.IsWhiteSpace(c)).ToArray());
         }
-        
+
+        public static string RemoveSpecial_characters(string str)
+        {
+            return Regex.Replace(str, "[^a-zA-Z0-9]+", "", RegexOptions.Compiled);
+        }
+
         private string GetConnectionNameDatabase(string connectionString)
         {
             string databaseName = "";
@@ -391,7 +396,7 @@ namespace Magic.EntityFramework.Scaffolding
                 }
             }
 
-            return RemoveSpaces(databaseName);
+            return RemoveSpecial_characters(RemoveSpaces(databaseName));
         }
 
         private string GetCommandValue(string command, string connectionString)
